@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Классификация цветов</title>
-    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <title>Классификатор цветов</title>
+    <link rel="icon" href="{{ url_for('static', filename=favicon.ico) }}">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: Arial,sans-serif;
             margin: 0;
             padding: 0;
             display: flex;
@@ -16,41 +15,46 @@
             align-items: flex-start;
             height: 100vh;
             background: linear-gradient (to bottom, #74ebd5, #acb6e5);
-        }
-        .container {
+
+       }
+       .container {
             text-align: center;
             padding: 20px;
             margin-top: 50px;
             background: white;
             border-radius: 8px;
-        }
-        form {
+       }
+       form {
             margin-top: 20px;
-        }
-        h1, h2 {
+       }
+       h1, h2 {
             margin-bottom: 10px;
-        }
-        img {
+       }
+       img {
             margin-top: 20px;
-            margin-width: 300px;
-        }
+            max-width: 300px;
+       }
     </style>
+
 </head>
 <body>
     <div class="container">
-        <h1>Классификация цветов</h1>
+        <h1>Классификатор цветов</h1>
         <form action="/predict" method="POST" enctype="multipart/form-data">
             <input type="file" name="file" accept=".jpg, .jpeg, .png" required>
             <button type="submit">Предсказать</button>
         </form>
-        {% if result %}
-            <h2>Результат</h2>
-            <p>Цвет: {{ result['class'] }}</p>
-            <p>Вероятность: {{ result['probability'] | round(2)}}%</p>
-            <img src="data: image/jpeg;base64,{{ result['image'] }}" alt="Uploaded image">
-        {% endif %} }
-    </div>        
 
-       
+        {% if result %}
+            <h2>Результат:</h2>
+            <p>Вид: {{ result['class'] }}</p>
+            <p>Вероятность: {{ result['probability'] | round(2) }}%</p>
+            <img src="data:image/jpg;base64,{{ result['image']}}" alt="Uploaded Image">
+        {% endif %}
+        
+
+
+    </div>
+
 </body>
 </html>

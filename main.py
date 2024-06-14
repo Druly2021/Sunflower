@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect
+from keras.src.models import model
 from werkzeug.utils import secure_filename
 import os
 from PIL import Image
@@ -9,16 +10,21 @@ from io import BytesIO
 
 app = Flask(__name__)
 
-model = tf.keras.models.load_model('my_sunflowers_model.h5')
+
+def load_model():
+    return tf.keras.models.load_model('my_sunflowers_model.h5', compile=False)
+
+
 class_names = ['ромашка', 'одуванчик', 'роза', 'подсолнух', 'тюльпан']
 
 UPLOAD_FOLDER = 'uploads'
-ALLOWED_EXTENSIONS = {'jpg, jpeg, png'}
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lover() in ALLOWED_EXTENSIONS
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 @app.route('/')
@@ -49,9 +55,9 @@ def predict():
         score = tf.nn.softmax(predictions[0])
 
         result = {
-            'class': class_names[np.argmax(score)],
-            'probability': 100 * np.max(score),
-            'image': get_base64_image(img)
+           'class': class_names[np.argmax(score)],
+           'probability': 100 * np.max(score),
+           'image': get_base64_image(img)
         }
 
         return render_template('index.html', result=result, filename=filename)
