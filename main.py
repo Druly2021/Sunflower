@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, redirect
-from keras.src.models import model
 from werkzeug.utils import secure_filename
 import os
 from PIL import Image
